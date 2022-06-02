@@ -2,9 +2,9 @@ package main
 
 import (
 	"band-app-go/pkg/http/rest"
-	"band-app-go/pkg/input"
 	"band-app-go/pkg/insert"
 	"band-app-go/pkg/storage/mongo"
+	"band-app-go/pkg/util"
 	"net/http"
 	"os"
 
@@ -23,13 +23,13 @@ func runBandApp() error {
 	log.SetFormatter(&log.JSONFormatter{})
 	log.Info("⌛ Starting up Band-app")
 
-	envVars, err := input.GetEnvVariables()
+	config, err := util.LoadConfig()
 	if err != nil {
 		return err
 	}
-	log.Info("✅ Got environment variables")
+	log.Info("✅ Loaded config")
 
-	dbConn, err := mongo.ConnectToMongo(envVars)
+	dbConn, err := mongo.ConnectToMongo(&config)
 	if err != nil {
 		return err
 	}
