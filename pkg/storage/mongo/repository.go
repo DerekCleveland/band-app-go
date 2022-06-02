@@ -1,8 +1,8 @@
 package mongo
 
 import (
-	"band-app-go/pkg/input"
 	"band-app-go/pkg/insert"
+	"band-app-go/pkg/util"
 	"context"
 	"fmt"
 	"time"
@@ -17,10 +17,9 @@ type Storage struct {
 	dbConn *mongo.Client
 }
 
-func ConnectToMongo(e *input.EnvVariables) (*Storage, error) {
+func ConnectToMongo(c *util.Config) (*Storage, error) {
 	// Set client options
-	// clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@%s", e.UsernameStorage, e.PasswordStorage, e.HostStorage))
-	clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s", e.UsernameStorage, e.PasswordStorage, e.HostStorage))
+	clientOptions := options.Client().ApplyURI(fmt.Sprintf("%s://%s:%s@%s:%s", c.MongoScheme, c.MongoUsername, c.MongoPassword, c.MongoHost, c.MongoPort))
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
