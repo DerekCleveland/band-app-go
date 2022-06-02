@@ -6,42 +6,40 @@ import (
 	"band-app-go/pkg/storage/mongo"
 	"band-app-go/pkg/util"
 	"net/http"
-	"os"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	err := runBandApp()
 	if err != nil {
-		log.Fatalf("%+v\n", err)
+		log.Fatal().Msgf("%+v", err)
 	}
 }
 
 func runBandApp() error {
-	log.SetOutput(os.Stdout)
-	log.SetFormatter(&log.JSONFormatter{})
-	log.Info("⌛ Starting up Band-app")
+	log.Info().Msg("⌛ Starting up Band-app")
 
 	config, err := util.LoadConfig()
 	if err != nil {
 		return err
 	}
-	log.Info("✅ Loaded config")
+	log.Info().Msg("✅ Loaded config - Got enviroment variables")
 
 	dbConn, err := mongo.ConnectToMongo(&config)
 	if err != nil {
 		return err
 	}
-	log.Info("✅ Connected to storage")
+	log.Info().Msg("✅ Connected to storage")
 
 	insertService := insert.NewService(dbConn)
 
 	router := rest.Handler(insertService)
-	log.Info("✅ Router created")
+	log.Info().Msg("✅ Router created")
 
-	log.Info("✅ Band-app is now serving")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	// TODO add functionality for graceful shutdown
+	log.Info().Msg("✅ Band-app is now serving")
+	log.Fatal().Err(http.ListenAndServe(":8080", router))
 
 	return nil
 }

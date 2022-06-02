@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 func Handler(i insert.Service) http.Handler {
@@ -60,7 +60,7 @@ func handleInsertBand(i insert.Service) func(w http.ResponseWriter, r *http.Requ
 			return
 		}
 
-		log.Info("Inserting band:", tempBand)
+		log.Info().Msgf("Inserting band: %+v", tempBand)
 		i.InsertBand(tempBand)
 	}
 }

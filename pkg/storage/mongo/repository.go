@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -73,13 +73,13 @@ func (s *Storage) CheckStorageIfBandExists(b insert.Band) error {
 
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err == mongo.ErrNoDocuments {
-		log.Info("Document doesn't exist")
+		log.Info().Msg("Document doesn't exist")
 		return nil
 	} else if err != nil {
-		log.Error(err)
+		log.Error().Err(err).Msg("Failed to find document")
 		return err
 	}
 
-	log.Info("Document already exists")
+	log.Info().Msgf("Document already exists: %+v", result)
 	return insert.ErrDuplicate
 }
