@@ -19,7 +19,8 @@ type Storage struct {
 
 func ConnectToMongo(e *input.EnvVariables) (*Storage, error) {
 	// Set client options
-	clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@%s", e.UsernameStorage, e.PasswordStorage, e.HostStorage))
+	// clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://%s:%s@%s", e.UsernameStorage, e.PasswordStorage, e.HostStorage))
+	clientOptions := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%s@%s", e.UsernameStorage, e.PasswordStorage, e.HostStorage))
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)

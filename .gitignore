@@ -17,3 +17,6 @@ cmd/band-app/band-app
 
 # Editor Files
 .vscode
+
+# Secrets
+*.secret
