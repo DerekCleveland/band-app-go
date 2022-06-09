@@ -14,6 +14,7 @@ func Handler(i insert.Service) http.Handler {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/insertband", handleInsertBand(i))
+	router.HandleFunc("/healthz", handleHealthCheck)
 
 	// Debugging and profiling
 	//router.HandleFunc("/debug/pprof/", pprof.Index)
@@ -63,4 +64,10 @@ func handleInsertBand(i insert.Service) func(w http.ResponseWriter, r *http.Requ
 		log.Info().Msgf("Inserting band: %+v", tempBand)
 		i.InsertBand(tempBand)
 	}
+}
+
+func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "OK")
+	log.Info().Msg("responded - OK")
 }

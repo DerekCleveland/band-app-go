@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-cmd/band-app/band-app
+cmd/band-app-server/band-app-server
 
 # Test binary, built with `go test -c`
 *.test

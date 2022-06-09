@@ -62,6 +62,7 @@ func (s *Storage) CheckStorageIfBandExists(b insert.Band) error {
 
 	var result InsertBand
 
+	// TODO Should only filter off of bandname. Other two options should be handled by updates
 	filter := bson.M{
 		"bandname":   b.BandName,
 		"bandrating": b.BandRating,
@@ -73,7 +74,7 @@ func (s *Storage) CheckStorageIfBandExists(b insert.Band) error {
 
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err == mongo.ErrNoDocuments {
-		log.Info().Msg("Document doesn't exist")
+		log.Debug().Msg("Document doesn't exist")
 		return nil
 	} else if err != nil {
 		log.Error().Err(err).Msg("Failed to find document")

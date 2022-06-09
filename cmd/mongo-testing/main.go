@@ -19,10 +19,6 @@ type InsertBand struct {
 }
 
 func main() {
-	// e, err := input.GetEnvVariables()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	config, err := util.LoadConfig()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to load config")

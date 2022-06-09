@@ -8,21 +8,26 @@ These directions will guide you to getting the project setup, modifying, and run
 
 ### Prerequisites
 
-* GOLANG 1.16
+* GOLANG 1.16+
 * git
 * docker
 
 ### Nice to haves
 
-* Insomnia
+* Postman
+* MongoDB Compass
 
 ## Building the binary
 
-From cmd/band-app run the following command.
+From cmd/band-app-server run the following command.
 
 ```bash
 go build
 ```
+
+## Makefile
+
+Look at the Makefile for a list of commands in regards to running/building the project.
 
 ## Profiling the project
 
@@ -52,18 +57,4 @@ Installing with brew:
 
 ```bash
 brew install go
-```
-
-## git
-
-```bash
-brew install git
-```
-
-## insomnia
-
-insomnia is a useful tool to help you mock up and send requests to your API endpoints.
-
-```bash
-brew install --cask insomnia
 ```
