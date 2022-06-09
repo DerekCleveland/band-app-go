@@ -2,6 +2,7 @@ package rest
 
 import (
 	"band-app-go/pkg/insert"
+	"band-app-go/pkg/listing"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,10 +11,16 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func Handler(i insert.Service) http.Handler {
+func Handler(i insert.Service, l listing.Service) http.Handler {
 	router := mux.NewRouter()
 
+	// Insert handlers
 	router.HandleFunc("/insertband", handleInsertBand(i))
+
+	// Listing handlers
+	router.HandleFunc("/listband", handleListBand(l))
+
+	// Health check handlers
 	router.HandleFunc("/healthz", handleHealthCheck)
 
 	// Debugging and profiling
@@ -30,6 +37,31 @@ func Handler(i insert.Service) http.Handler {
 	//router.Handle("/debug/pprof/block", pprof.Handler("block"))
 
 	return router
+}
+
+func handleListBand(l listing.Service) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Get the Band name from URL params
+		bandName := r.URL.Query().Get("Band")
+
+		tmpBand := listing.Band{
+			BandName: bandName,
+		}
+
+		band, err := l.SelectBand(tmpBand)
+		if err != nil {
+			log.Error().Msgf("Error listing band: %+v", err)
+			http.Error(w, fmt.Sprintf("[ERROR] band: %+v not found", bandName), http.StatusInternalServerError)
+			return
+		}
+
+		log.Info().Msgf("Listing band: %+v", band)
+
+		// TODO response is including "band" in all the fields. This is because of the struct but even with the json flag its not removing
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(fmt.Sprintf("%+v", band)))
+	}
 }
 
 func handleInsertBand(i insert.Service) func(w http.ResponseWriter, r *http.Request) {

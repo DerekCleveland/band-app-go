@@ -3,6 +3,7 @@ package main
 import (
 	"band-app-go/pkg/http/rest"
 	"band-app-go/pkg/insert"
+	"band-app-go/pkg/listing"
 	"band-app-go/pkg/storage/mongo"
 	"band-app-go/pkg/util"
 	"net/http"
@@ -39,8 +40,9 @@ func runBandApp() error {
 	log.Info().Msg("✅ Connected to storage")
 
 	insertService := insert.NewService(dbConn)
+	listingService := listing.NewService(dbConn)
 
-	router := rest.Handler(insertService)
+	router := rest.Handler(insertService, listingService)
 	log.Info().Msg("✅ Router created")
 
 	// TODO add functionality for graceful shutdown

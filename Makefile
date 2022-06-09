@@ -14,7 +14,7 @@ build:
 
 # Run
 run:
-	docker run --rm --env-file=./envs/local_region.env --env-file=./envs/local_region.secret --link band-app-mongo -p=${PORT}:${PORT} ${IMG}
+	docker run --rm --env-file=./envs/local_region_docker.env --env-file=./envs/local_region.secret --link band-app-mongo -p=${PORT}:${PORT} ${IMG}
 
 # GO TASKS
 # Build
